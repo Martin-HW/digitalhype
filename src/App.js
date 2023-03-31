@@ -1,25 +1,69 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import styles from "./my-style.module.css";
 
-function App() {
+const App = () => {
+  const [list, setList] = useState([]);
+  const [item, setItem] = useState("");
+
+  const handleCreate = () => {
+    let one = item.split("0").filter((val, ind, arr) => {
+      return val !== "";
+    });
+    const [first, last, id] = one;
+    one = `{"first_name":"${first}","last_name":"${last}","id":"${id}"}`;
+    setItem(one);
+    setList(list.concat(one));
+    setItem("");
+  };
+
+  const handleDelete = (index) => {
+    setList(
+      list.filter((val, ind, arr) => {
+        return ind !== index;
+      })
+    );
+  };
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>ENTER YOUR DATA</h1>
+      <input
+        type="text"
+        value={item}
+        placeholder="Enter your info"
+        onChange={(e) => setItem(e.target.value)}
+      />
+      <button
+        className={styles.add}
+        onClick={() => {
+          if (item === "" || item === " ") {
+            alert("Enter some info...PLEASE!!!!!!!!!");
+          } else {
+            handleCreate();
+          }
+        }}
+      >
+        Create info
+      </button>
+
+      <ul>
+        {list.map((val, ind, arr) => {
+          return (
+            <li key={ind}>
+              {val} {"  "}{" "}
+              <button
+                className={styles.delete}
+                onClick={() => {
+                  handleDelete(ind);
+                }}
+              >
+                delete
+              </button>{" "}
+            </li>
+          );
+        })}
+      </ul>
     </div>
   );
-}
-
+};
+// Robert000Smith000123
 export default App;
